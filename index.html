@@ -1,39 +1,30 @@
 <!DOCTYPE html>
 <html lang="hi">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>अविनाश अतुल्य | गणेश उत्सव 2026</title>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ganesh Schedule</title>
 <style>
 body{font-family:Arial,sans-serif;background:#FFF8EC;margin:0;color:#333}
 header{background:linear-gradient(135deg,#E65100,#F59E0B,#FDE68A);padding:22px;text-align:center;color:#fff}
-.logo{display:inline-block;background:#fff;padding:10px 18px;border-radius:14px}
-.logo .s{color:#2563EB;font-size:13px;font-weight:bold}.logo .b{color:#65A30D;font-size:34px;font-weight:bold}
-.wrap{max-width:980px;margin:auto;padding:18px}
-.card{background:#fff;border-radius:14px;padding:16px;box-shadow:0 2px 8px rgba(0,0,0,.08);margin-bottom:16px}
-table{width:100%;border-collapse:collapse}th,td{border:1px solid #ddd;padding:8px;text-align:center}
-th{background:#F59E0B;color:#fff}.blk{display:flex;gap:6px;justify-content:center}.blk input{width:55px;padding:6px;text-align:center}
-button{background:#F59E0B;color:#fff;border:none;padding:10px 16px;border-radius:8px;cursor:pointer}
-.hidden{display:none}input[type=password]{padding:8px;width:220px}
+.logo{display:inline-block;background:#fff;padding:10px 18px;border-radius:14px}.logo .s{color:#2563EB;font-size:13px;font-weight:bold}.logo .b{color:#65A30D;font-size:34px;font-weight:bold}
+.wrap{max-width:1000px;margin:auto;padding:18px}.card{background:#fff;border-radius:14px;padding:16px;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+.day{border:1px solid #ddd;border-radius:10px;margin:12px 0;padding:10px}.title{font-weight:bold;color:#D97706;margin-bottom:8px}.slot{margin:8px 0}
+.row{display:grid;grid-template-columns:90px 1fr 40px;gap:8px;margin:6px 0;align-items:center}
+select,input{padding:8px;border:1px solid #ccc;border-radius:6px}button{border:none;border-radius:8px;padding:8px 12px;cursor:pointer}.plus{background:#16A34A;color:#fff;font-size:18px}.save{background:#F59E0B;color:#fff}.lock{background:#374151;color:#fff}
+table{width:100%;border-collapse:collapse;margin-top:10px}th,td{border:1px solid #ddd;padding:8px;text-align:left}th{background:#F59E0B;color:#fff}
 </style></head>
 <body>
-<header><div class="logo"><div class="s">अविनाश</div><div class="b">अतुल्य</div></div>
-<h2>🪔 श्री गणेश चतुर्थी उत्सव 2026</h2><div>10 दिवसीय आरती एवं प्रसाद अर्पण कार्यक्रम</div></header>
-<div class="wrap">
-<div class="card"><h3>🔐 Admin Login</h3>
-<input type=password id=p placeholder="Admin Password"><button onclick=login()>Login</button>
-<span id=st style="margin-left:10px;color:#B91C1C">Locked</span></div>
-<div class="card"><h3>📅 आरती एवं प्रसाद अर्पण अनुसूची</h3>
-<table><thead><tr><th>दिनांक</th><th>प्रातःकाल (A,B,C,D)</th><th>सायंकाल (A,B,C,D)</th></tr></thead><tbody id=tb></tbody></table>
-<div style="margin-top:12px"><button id=sv onclick=save() class=hidden>💾 Save Schedule</button></div></div>
-<div class="card hidden" id=rp><h3>📊 Admin Report</h3><table><thead><tr><th>दिनांक</th><th>Morning</th><th>Evening</th></tr></thead><tbody id=rb></tbody></table></div>
-</div>
+<header><div class="logo"><div class="s">अविनाश</div><div class="b">अतुल्य</div></div><h2>🪔 श्री गणेश चतुर्थी उत्सव 2026</h2><div>10 दिवसीय आरती एवं प्रसाद अर्पण कार्यक्रम</div></header>
+<div class="wrap"><div class="card"><div style="display:flex;gap:8px;align-items:center;justify-content:space-between;flex-wrap:wrap"><div><b>🔐 Admin Password Required for Edit</b></div><div><input type=password id=p placeholder="Password" style="width:140px"><button class=lock onclick=unlock()>Unlock</button><span id=st style="margin-left:8px;color:#B91C1C">Locked</span></div></div><div id=schedule></div><button id=saveBtn class="save" style="display:none;margin-top:12px" onclick=save()>💾 Save Schedule</button></div><div class=card style="margin-top:16px;display:none" id=report><h3>📊 Admin Report</h3><table><thead><tr><th>दिनांक</th><th>प्रातःकाल</th><th>सायंकाल</th></tr></thead><tbody id=rb></tbody></table></div></div>
 <script>
 const dates=["14.09.2026 (Monday)","15.09.2026","16.09.2026","17.09.2026","18.09.2026","19.09.2026","20.09.2026","21.09.2026","22.09.2026","23.09.2026","24.09.2026"];
-let admin=false;const key="ganesh2026";let data=JSON.parse(localStorage.getItem(key)||"null")||dates.map((d,i)=>({d,m:["","","",""],e:["","","",""]}));
-function cells(arr,p,dis){return `<div class=blk>${["A","B","C","D"].map((b,j)=>`<div><small>${b}</small><input ${dis?"disabled":""} value="${arr[j]||""}" onchange="u('${p}',${j},this.value)"></div>`).join("")}</div>`}
-function draw(){tb.innerHTML="";rb.innerHTML="";data.forEach((r,i)=>{tb.innerHTML+=`<tr><td>${r.d}</td><td>${cells(r.m,`m${i}`,!admin)}</td><td>${cells(r.e,`e${i}`,!admin)}</td></tr>`;rb.innerHTML+=`<tr><td>${r.d}</td><td>${r.m.join(" | ")}</td><td>${r.e.join(" | ")}</td></tr>`});sv.className=admin?"":"hidden";rp.className=admin?"card":"card hidden";st.textContent=admin?"Admin Active":"Locked";st.style.color=admin?"green":"#B91C1C"}
-function u(id,idx,v){const t=id[0],r=+id.slice(1);if(t=="m")data[r].m[idx]=v;else data[r].e[idx]=v}
-function login(){if(p.value==="D404"){admin=true;draw();alert("Admin Login Successful")}else alert("Wrong Password")}
-function save(){localStorage.setItem(key,JSON.stringify(data));alert("Schedule Saved")}
-draw();
+const key="ganesh_schedule";let admin=false;
+let data=JSON.parse(localStorage.getItem(key)||"null")||dates.map(d=>({date:d,m:[{b:"A",f:""}],e:[{b:"A",f:""}]}));
+function unlock(){if(document.getElementById('p').value==="D404"){admin=true;document.getElementById('st').textContent="Unlocked";document.getElementById('st').style.color="green";render();}else alert("Incorrect Password")}
+function add(day,slot){if(!admin){alert("Admin password required");return;}data[day][slot].push({b:"A",f:""});render();}
+function upd(day,slot,i,field,val){if(!admin)return;data[day][slot][i][field]=val;}
+function section(rows,day,slot){return rows.map((r,i)=>`<div class=row><select ${admin?"":"disabled"} onchange="upd(${day},'${slot}',${i},'b',this.value)"><option ${r.b=="A"?"selected":""}>A</option><option ${r.b=="B"?"selected":""}>B</option><option ${r.b=="C"?"selected":""}>C</option><option ${r.b=="D"?"selected":""}>D</option></select><input ${admin?"":"readonly"} value="${r.f}" placeholder="Flat No." oninput="upd(${day},'${slot}',${i},'f',this.value)"><button class=plus onclick="add(${day},'${slot}')">+</button></div>`).join("");}
+function render(){let h="";let rpt="";data.forEach((d,i)=>{h+=`<div class=day><div class=title>${d.date}</div><div class=slot><b>🌞 Morning</b>${section(d.m,i,'m')}</div><div class=slot><b>🌙 Evening</b>${section(d.e,i,'e')}</div></div>`;rpt+=`<tr><td>${d.date}</td><td>${d.m.map(x=>x.b+"-"+x.f).join("<br>")}</td><td>${d.e.map(x=>x.b+"-"+x.f).join("<br>")}</td></tr>`});document.getElementById('schedule').innerHTML=h;document.getElementById('rb').innerHTML=rpt;document.getElementById('saveBtn').style.display=admin?"inline-block":"none";document.getElementById('report').style.display=admin?"block":"none";}
+function save(){localStorage.setItem(key,JSON.stringify(data));alert("Schedule Saved Successfully");}
+render();
 </script></body></html>
