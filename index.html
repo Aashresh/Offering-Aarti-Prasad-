@@ -1,29 +1,50 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="hi">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ganesh Portal 2026</title>
+<title>Avinash Atulya Ganesh Portal 2026</title>
 <style>
-body{font-family:Arial;margin:0;background:#FFF8EC}
-header{background:linear-gradient(135deg,#D97706,#F59E0B,#FDE68A);color:#fff;padding:20px;text-align:center}
-.logo{display:inline-block;background:#fff;color:#65A30D;padding:8px 18px;border-radius:10px;font-size:30px;font-weight:bold}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#FFF7ED}
+header{
+background:linear-gradient(135deg,#D97706,#F59E0B,#FDE68A);
+color:#fff;padding:20px;text-align:center}
+.logo{
+display:inline-block;background:#fff;color:#65A30D;
+padding:8px 18px;border-radius:12px;
+font-size:28px;font-weight:bold}
 .logo small{display:block;color:#2563EB;font-size:12px}
-.container{max-width:900px;margin:auto;padding:15px}
-.card{background:#fff;border-radius:12px;padding:15px;margin-bottom:15px;box-shadow:0 2px 8px rgba(0,0,0,.08)}
-.row{display:flex;gap:8px;flex-wrap:wrap}
-select,input{padding:8px;border:1px solid #ccc;border-radius:6px}
-select{width:80px}
+.container{max-width:950px;margin:auto;padding:15px}
+.card{
+background:#fff;border-radius:14px;padding:15px;
+margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+.title{color:#B45309;font-weight:bold;font-size:18px}
+.section{margin-top:12px}
+.row{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+select,input{
+padding:9px;border:1px solid #D1D5DB;border-radius:8px}
+select{width:90px}
 input{flex:1}
-button{padding:8px 14px;border:none;border-radius:6px;color:#fff;cursor:pointer}
+button{
+border:none;border-radius:8px;padding:9px 14px;
+cursor:pointer;color:#fff;font-weight:bold}
 .save{background:#16A34A}
 .edit{background:#2563EB}
 .del{background:#DC2626}
+.report{background:#92400E}
 table{width:100%;border-collapse:collapse;margin-top:10px}
-th,td{border:1px solid #ddd;padding:6px;text-align:center}
+th,td{border:1px solid #E5E7EB;padding:8px;text-align:center}
 th{background:#F59E0B;color:#fff}
-.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);justify-content:center;align-items:center}
-.box{background:#fff;padding:20px;border-radius:10px;width:300px}
+.empty{color:#9CA3AF;padding:10px}
+.modal{
+display:none;position:fixed;inset:0;
+background:rgba(0,0,0,.5);
+justify-content:center;align-items:center}
+.box{
+background:#fff;padding:20px;border-radius:12px;
+width:320px}
+footer{text-align:center;padding:15px;color:#6B7280}
 </style>
 </head>
 <body>
@@ -31,121 +52,180 @@ th{background:#F59E0B;color:#fff}
 <header>
 <div class="logo"><small>अविनाश</small>अतुल्य</div>
 <h2>🪔 श्री गणेश चतुर्थी उत्सव 2026</h2>
-<h3>आरती एवं प्रसाद अर्पण कार्यक्रम</h3>
-<p>14 सितम्बर (सायंकाल) – 24 सितम्बर 2026</p>
+<h3>10 दिवसीय आरती एवं प्रसाद अर्पण कार्यक्रम</h3>
+<p>14 सितम्बर 2026 (Monday) – 24 सितम्बर 2026 (Thursday)</p>
 </header>
 
-<div class="container" id="app"></div>
+<div class="container">
+<div style="text-align:right;margin-bottom:10px">
+<button class="report" onclick="openReport()">📊 Admin Report</button>
+</div>
 
-<div id="admin" class="modal">
+<div id="schedule"></div>
+</div>
+
+<div id="adminModal" class="modal">
 <div class="box">
-<h3>Admin Password</h3>
-<input type="password" id="pwd" placeholder="D404">
-<div style="margin-top:10px;text-align:right">
-<button onclick="closeAdmin()" style="background:#6B7280">Cancel</button>
-<button onclick="verify()" class="save">Unlock</button>
+<h3>🔒 Admin Password</h3>
+<input type="password" id="pwd" placeholder="Enter Password" style="width:100%;margin-top:10px">
+<div style="display:flex;justify-content:end;gap:8px;margin-top:15px">
+<button style="background:#6B7280" onclick="closeAdmin()">Cancel</button>
+<button class="save" onclick="verify()">Unlock</button>
 </div>
 </div>
 </div>
+
+<div id="reportModal" class="modal">
+<div class="box" style="width:90%;max-width:700px">
+<div style="display:flex;justify-content:space-between">
+<h3>Ganesh Booking Report</h3>
+<button style="background:#6B7280" onclick="closeReport()">Close</button>
+</div>
+<div id="reportBody"></div>
+</div>
+</div>
+
+<footer>
+Designed by <b>D404</b>
+</footer>
 
 <script>
 const SCRIPT_URL="https://script.google.com/macros/s/AKfycbyGcwRzXvdR0Qt4ffusnTEVp8U1CwnvGIIfOidq9ZmMpz6hS6W6LNXTLyhnTEMXtK0z/exec";
 const PASSWORD="D404";
 
 const dates=[
-["14.09.2026 (Monday)",false,true],
-["15.09.2026",true,true],
-["16.09.2026",true,true],
-["17.09.2026",true,true],
-["18.09.2026",true,true],
-["19.09.2026",true,true],
-["20.09.2026",true,true],
-["21.09.2026",true,true],
-["22.09.2026",true,true],
-["23.09.2026",true,true],
-["24.09.2026",true,true]
+["14.09.2026","Monday",false,true],
+["15.09.2026","Tuesday",true,true],
+["16.09.2026","Wednesday",true,true],
+["17.09.2026","Thursday",true,true],
+["18.09.2026","Friday",true,true],
+["19.09.2026","Saturday",true,true],
+["20.09.2026","Sunday",true,true],
+["21.09.2026","Monday",true,true],
+["22.09.2026","Tuesday",true,true],
+["23.09.2026","Wednesday",true,true],
+["24.09.2026","Thursday",true,true]
 ];
 
-let editTarget=null;
+let roster=[];
+let action=null;
+let reportMode=false;
 
 async function loadRoster(){
-  const res=await fetch(SCRIPT_URL);
-  const rows=await res.json();
-  render(rows);
+try{
+const r=await fetch(SCRIPT_URL);
+roster=await r.json();
+render();
+}catch(e){}
 }
 
-function render(rows){
+function render(){
+
 let html="";
 
 dates.forEach(d=>{
-const day=d[0];
 
-html+=`<div class="card"><h3 style="color:#B45309">${day}</h3>`;
+const date=d[0];
+const day=d[1];
 
-if(d[1]){
-html+=slot(day,"Morning");
-html+=roster(rows,day,"Morning");
+html+=`
+<div class="card">
+<div class="title">${date} (${day})</div>`;
+
+if(d[2]){
+html+=section(date,"Morning");
 }
 
-html+=slot(day,"Evening");
-html+=roster(rows,day,"Evening");
+html+=section(date,"Evening");
 
-if(day.includes("24.09"))
-html+=`<p style="color:#B91C1C;font-weight:bold">🌺 विसर्जन एवं महाआरती</p>`;
+if(date==="24.09.2026"){
+html+=`<p style="color:#B91C1C;font-weight:bold">
+🌺 विसर्जन एवं महाआरती
+</p>`;
+}
 
-html+="</div>";
+html+=`</div>`;
+
 });
 
-app.innerHTML=html;
+document.getElementById("schedule").innerHTML=html;
+
+buildReport();
+
 }
 
-function slot(date,session){
-return `
-<div style="margin-top:10px">
-<b>${session=="Morning"?"🌞 Morning":"🌙 Evening"}</b>
+function section(date,session){
+
+const rows=roster.filter(x=>x.date===date && x.session===session);
+
+let h=`
+<div class="section">
+<b>${session==="Morning"?"🌞 Morning":"🌙 Evening"}</b>
+
 <div class="row">
 <select id="b${date}${session}">
-<option>A</option><option>B</option><option>C</option><option>D</option>
+<option>A</option>
+<option>B</option>
+<option>C</option>
+<option>D</option>
 </select>
-<input id="f${date}${session}" placeholder="Flat No.">
-<button class="save" onclick="saveEntry('${date}','${session}')">Save</button>
-</div>
+
+<input id="f${date}${session}" placeholder="Flat Number">
+
+<button class="save"
+onclick="saveBooking('${date}','${session}')">
+Save
+</button>
+
 </div>`;
-}
 
-function roster(rows,date,session){
+if(rows.length===0){
 
-const list=rows.filter(r=>r[0]==date && r[1]==session);
+h+=`<div class="empty">No booking yet</div>`;
 
-let t=`<table>
-<tr><th>Block</th><th>Flat</th><th>Action</th></tr>`;
-
-if(list.length==0){
-t+=`<tr><td colspan="3">Available</td></tr>`;
 }else{
 
-list.forEach((r,i)=>{
-t+=`<tr>
-<td>${r[2]}</td>
-<td>${r[3]}</td>
+h+=`
+<table>
+<tr>
+<th>Block</th>
+<th>Flat</th>
+<th>Action</th>
+</tr>`;
+
+rows.forEach(r=>{
+
+h+=`
+<tr>
+<td>${r.block}</td>
+<td>${r.flat}</td>
 <td>
-<button class="edit" onclick="requestEdit('${date}','${session}','${r[2]}','${r[3]}')">Edit</button>
+<button class="edit"
+onclick="requestEdit('${r.id}')">Edit</button>
+
+<button class="del"
+onclick="requestDelete('${r.id}')">Delete</button>
 </td>
 </tr>`;
+
 });
 
+h+="</table>";
+
 }
 
-t+="</table>";
-return t;
+h+="</div>";
+
+return h;
+
 }
 
-async function saveEntry(date,session){
+async function saveBooking(date,session){
 
 const block=document.getElementById("b"+date+session).value;
-const flat=document.getElementById("f"+date+session).value;
+const flat=document.getElementById("f"+date+session).value.trim();
 
-if(flat==""){
+if(flat===""){
 alert("Enter Flat Number");
 return;
 }
@@ -153,56 +233,136 @@ return;
 await fetch(SCRIPT_URL,{
 method:"POST",
 body:JSON.stringify({
-date:date,
-session:session,
-block:block,
-flat:flat,
-mode:"add"
+mode:"add",
+date,
+session,
+block,
+flat
 })
 });
 
+document.getElementById("f"+date+session).value="";
+
 loadRoster();
+
 }
 
-function requestEdit(date,session,block,flat){
-editTarget={date,session,block,flat};
-admin.style.display="flex";
+function requestEdit(id){
+action={mode:"edit",id};
+reportMode=false;
+document.getElementById("adminModal").style.display="flex";
+}
+
+function requestDelete(id){
+action={mode:"delete",id};
+reportMode=false;
+document.getElementById("adminModal").style.display="flex";
+}
+
+function openReport(){
+reportMode=true;
+document.getElementById("adminModal").style.display="flex";
+}
+
+function closeAdmin(){
+document.getElementById("adminModal").style.display="none";
+document.getElementById("pwd").value="";
 }
 
 async function verify(){
 
-if(pwd.value!==PASSWORD){
+if(document.getElementById("pwd").value!==PASSWORD){
 alert("Wrong Password");
 return;
 }
 
-const newBlock=prompt("Block",editTarget.block);
-const newFlat=prompt("Flat No.",editTarget.flat);
+closeAdmin();
+
+if(reportMode){
+document.getElementById("reportModal").style.display="flex";
+return;
+}
+
+if(action.mode==="edit"){
+
+const row=roster.find(x=>x.id===action.id);
+
+const block=prompt("Block",row.block);
+const flat=prompt("Flat Number",row.flat);
+
+if(block===null||flat===null)return;
 
 await fetch(SCRIPT_URL,{
 method:"POST",
 body:JSON.stringify({
 mode:"edit",
-date:editTarget.date,
-session:editTarget.session,
-oldBlock:editTarget.block,
-oldFlat:editTarget.flat,
-block:newBlock,
-flat:newFlat
+id:row.id,
+block,
+flat
 })
 });
 
-closeAdmin();
-loadRoster();
 }
 
-function closeAdmin(){
-admin.style.display="none";
-pwd.value="";
+if(action.mode==="delete"){
+
+if(confirm("Delete this booking?")){
+
+await fetch(SCRIPT_URL,{
+method:"POST",
+body:JSON.stringify({
+mode:"delete",
+id:action.id
+})
+});
+
+}
+
 }
 
 loadRoster();
-setInterval(loadRoster,5000);
+
+}
+
+function buildReport(){
+
+let t=`
+<table>
+<tr>
+<th>Date</th>
+<th>Morning</th>
+<th>Evening</th>
+<th>Total</th>
+</tr>`;
+
+dates.forEach(d=>{
+
+const m=roster.filter(x=>x.date===d[0]&&x.session==="Morning").length;
+const e=roster.filter(x=>x.date===d[0]&&x.session==="Evening").length;
+
+t+=`
+<tr>
+<td>${d[0]}</td>
+<td>${m}</td>
+<td>${e}</td>
+<td>${m+e}</td>
+</tr>`;
+
+});
+
+t+="</table>";
+
+document.getElementById("reportBody").innerHTML=t;
+
+}
+
+function closeReport(){
+document.getElementById("reportModal").style.display="none";
+}
+
+loadRoster();
+setInterval(loadRoster,3000);
+
 </script>
 
 </body>
