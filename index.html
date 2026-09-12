@@ -585,7 +585,25 @@ document.getElementById("reportModal").style.display="none";
 
 loadRoster();
 
-setInterval(loadRoster,3000);
+let typing = false;
+
+// Detect when user is typing
+document.addEventListener("input", (e) => {
+  if (e.target.tagName === "INPUT") {
+    typing = true;
+    clearTimeout(window.typingTimer);
+    window.typingTimer = setTimeout(() => {
+      typing = false;
+    }, 2000);
+  }
+});
+
+// Refresh only when not typing
+setInterval(() => {
+  if (!typing) {
+    loadRoster();
+  }
+}, 3000);
 
 </script>
 
