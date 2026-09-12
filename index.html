@@ -1,28 +1,29 @@
 <!DOCTYPE html>
-<html lang="hi">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Offering Aarti & Prasad</title>
+<title>Ganesh Portal 2026</title>
 <style>
-body{font-family:Arial;background:#FFF8EC;margin:0}
-header{background:linear-gradient(135deg,#D97706,#F59E0B,#FDE68A);color:#fff;text-align:center;padding:20px}
-.logo{display:inline-block;background:#fff;padding:8px 20px;border-radius:12px;color:#65A30D;font-size:30px;font-weight:bold}
+body{font-family:Arial;margin:0;background:#FFF8EC}
+header{background:linear-gradient(135deg,#D97706,#F59E0B,#FDE68A);color:#fff;padding:20px;text-align:center}
+.logo{display:inline-block;background:#fff;color:#65A30D;padding:8px 18px;border-radius:10px;font-size:30px;font-weight:bold}
 .logo small{display:block;color:#2563EB;font-size:12px}
 .container{max-width:900px;margin:auto;padding:15px}
 .card{background:#fff;border-radius:12px;padding:15px;margin-bottom:15px;box-shadow:0 2px 8px rgba(0,0,0,.08)}
-.booking{display:flex;gap:8px;margin-top:8px}
+.row{display:flex;gap:8px;flex-wrap:wrap}
 select,input{padding:8px;border:1px solid #ccc;border-radius:6px}
+select{width:80px}
 input{flex:1}
-button{padding:8px 12px;border:none;border-radius:6px;color:#fff;cursor:pointer}
+button{padding:8px 14px;border:none;border-radius:6px;color:#fff;cursor:pointer}
 .save{background:#16A34A}
 .edit{background:#2563EB}
 .del{background:#DC2626}
 table{width:100%;border-collapse:collapse;margin-top:10px}
 th,td{border:1px solid #ddd;padding:6px;text-align:center}
 th{background:#F59E0B;color:#fff}
-.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);justify-content:center;align-items:center}
-.box{background:#fff;padding:20px;border-radius:10px;width:280px}
+.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);justify-content:center;align-items:center}
+.box{background:#fff;padding:20px;border-radius:10px;width:300px}
 </style>
 </head>
 <body>
@@ -38,18 +39,18 @@ th{background:#F59E0B;color:#fff}
 
 <div id="admin" class="modal">
 <div class="box">
-<h3>🔒 Admin Verification</h3>
-<input type="password" id="pwd" placeholder="Password">
-<div style="margin-top:12px;text-align:right">
-<button onclick="closeBox()" style="background:#6B7280">Cancel</button>
+<h3>Admin Password</h3>
+<input type="password" id="pwd" placeholder="D404">
+<div style="margin-top:10px;text-align:right">
+<button onclick="closeAdmin()" style="background:#6B7280">Cancel</button>
 <button onclick="verify()" class="save">Unlock</button>
 </div>
 </div>
 </div>
 
 <script>
-const PASS="D404";
-const KEY="GANESH2026";
+const SCRIPT_URL="PASTE_YOUR_APPS_SCRIPT_URL_HERE";
+const PASSWORD="D404";
 
 const dates=[
 ["14.09.2026 (Monday)",false,true],
@@ -65,150 +66,143 @@ const dates=[
 ["24.09.2026",true,true]
 ];
 
-let roster=JSON.parse(localStorage.getItem(KEY)||"null");
-if(!roster){
-roster=dates.map(d=>({date:d[0],morning:[],evening:[]}));
+let editTarget=null;
+
+async function loadRoster(){
+  const res=await fetch(SCRIPT_URL);
+  const rows=await res.json();
+  render(rows);
 }
 
-let action=null;
-
-function saveData(){
-localStorage.setItem(KEY,JSON.stringify(roster));
-}
-
-function render(){
-
+function render(rows){
 let html="";
 
-roster.forEach((d,i)=>{
+dates.forEach(d=>{
+const day=d[0];
 
-html+=`<div class="card">
-<h3 style="color:#B45309">${d.date}</h3>`;
+html+=`<div class="card"><h3 style="color:#B45309">${day}</h3>`;
 
-if(i>0){
-
-html+=`<b>🌞 Morning</b>
-<div class="booking">
-<select id="mb${i}">
-<option>A</option><option>B</option><option>C</option><option>D</option>
-</select>
-<input id="mf${i}" placeholder="Flat No.">
-<button class="save" onclick="add(${i},'morning')">Save</button>
-</div>`;
-
-html+=table(d.morning,i,"morning");
-
+if(d[1]){
+html+=slot(day,"Morning");
+html+=roster(rows,day,"Morning");
 }
 
-html+=`<br><b>🌙 Evening</b>
-<div class="booking">
-<select id="eb${i}">
-<option>A</option><option>B</option><option>C</option><option>D</option>
-</select>
-<input id="ef${i}" placeholder="Flat No.">
-<button class="save" onclick="add(${i},'evening')">Save</button>
-</div>`;
+html+=slot(day,"Evening");
+html+=roster(rows,day,"Evening");
 
-html+=table(d.evening,i,"evening");
-
-if(i==10)
+if(day.includes("24.09"))
 html+=`<p style="color:#B91C1C;font-weight:bold">🌺 विसर्जन एवं महाआरती</p>`;
 
 html+="</div>";
-
 });
 
 app.innerHTML=html;
-
 }
 
-function table(arr,day,slot){
+function slot(date,session){
+return `
+<div style="margin-top:10px">
+<b>${session=="Morning"?"🌞 Morning":"🌙 Evening"}</b>
+<div class="row">
+<select id="b${date}${session}">
+<option>A</option><option>B</option><option>C</option><option>D</option>
+</select>
+<input id="f${date}${session}" placeholder="Flat No.">
+<button class="save" onclick="saveEntry('${date}','${session}')">Save</button>
+</div>
+</div>`;
+}
+
+function roster(rows,date,session){
+
+const list=rows.filter(r=>r[0]==date && r[1]==session);
 
 let t=`<table>
 <tr><th>Block</th><th>Flat</th><th>Action</th></tr>`;
 
-if(arr.length==0){
+if(list.length==0){
 t+=`<tr><td colspan="3">Available</td></tr>`;
 }else{
-arr.forEach((r,i)=>{
+
+list.forEach((r,i)=>{
 t+=`<tr>
-<td>${r.block}</td>
-<td>${r.flat}</td>
+<td>${r[2]}</td>
+<td>${r[3]}</td>
 <td>
-<button class="edit" onclick="requestEdit(${day},'${slot}',${i})">Edit</button>
-<button class="del" onclick="requestDelete(${day},'${slot}',${i})">Del</button>
+<button class="edit" onclick="requestEdit('${date}','${session}','${r[2]}','${r[3]}')">Edit</button>
 </td>
 </tr>`;
 });
+
 }
 
 t+="</table>";
 return t;
-
 }
 
-function add(day,slot){
+async function saveEntry(date,session){
 
-const block=document.getElementById((slot=="morning"?"mb":"eb")+day).value;
-const flat=document.getElementById((slot=="morning"?"mf":"ef")+day).value;
+const block=document.getElementById("b"+date+session).value;
+const flat=document.getElementById("f"+date+session).value;
 
 if(flat==""){
 alert("Enter Flat Number");
 return;
 }
 
-roster[day][slot].push({block,flat});
-saveData();
-render();
+await fetch(SCRIPT_URL,{
+method:"POST",
+body:JSON.stringify({
+date:date,
+session:session,
+block:block,
+flat:flat,
+mode:"add"
+})
+});
 
+loadRoster();
 }
 
-function requestEdit(day,slot,index){
-action={type:"edit",day,slot,index};
+function requestEdit(date,session,block,flat){
+editTarget={date,session,block,flat};
 admin.style.display="flex";
 }
 
-function requestDelete(day,slot,index){
-action={type:"delete",day,slot,index};
-admin.style.display="flex";
-}
+async function verify(){
 
-function verify(){
-
-if(pwd.value!=PASS){
+if(pwd.value!==PASSWORD){
 alert("Wrong Password");
 return;
 }
 
-if(action.type=="delete"){
+const newBlock=prompt("Block",editTarget.block);
+const newFlat=prompt("Flat No.",editTarget.flat);
 
-roster[action.day][action.slot].splice(action.index,1);
+await fetch(SCRIPT_URL,{
+method:"POST",
+body:JSON.stringify({
+mode:"edit",
+date:editTarget.date,
+session:editTarget.session,
+oldBlock:editTarget.block,
+oldFlat:editTarget.flat,
+block:newBlock,
+flat:newFlat
+})
+});
 
-}else{
-
-const r=roster[action.day][action.slot][action.index];
-const nb=prompt("Block",r.block);
-const nf=prompt("Flat No",r.flat);
-
-if(nb&&nf){
-r.block=nb;
-r.flat=nf;
+closeAdmin();
+loadRoster();
 }
 
-}
-
-saveData();
-closeBox();
-render();
-
-}
-
-function closeBox(){
+function closeAdmin(){
 admin.style.display="none";
 pwd.value="";
 }
 
-render();
+loadRoster();
+setInterval(loadRoster,5000);
 </script>
 
 </body>
