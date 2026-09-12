@@ -3,28 +3,26 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ganesh Portal 2026</title>
+<title>Offering Aarti & Prasad</title>
 <style>
 body{font-family:Arial;background:#FFF8EC;margin:0}
-header{background:linear-gradient(135deg,#D97706,#F59E0B,#FDE68A);padding:22px;color:#fff;text-align:center}
-.logo{display:inline-block;background:#fff;padding:10px 20px;border-radius:12px;color:#65A30D;font-size:32px;font-weight:bold}
+header{background:linear-gradient(135deg,#D97706,#F59E0B,#FDE68A);color:#fff;text-align:center;padding:20px}
+.logo{display:inline-block;background:#fff;padding:8px 20px;border-radius:12px;color:#65A30D;font-size:30px;font-weight:bold}
 .logo small{display:block;color:#2563EB;font-size:12px}
-.container{max-width:900px;margin:auto;padding:16px}
-.day{background:#fff;padding:14px;border-radius:12px;margin-bottom:14px;box-shadow:0 2px 8px rgba(0,0,0,.08)}
-.slot{margin-top:10px}
-.row{display:flex;gap:8px;margin:6px 0}
+.container{max-width:900px;margin:auto;padding:15px}
+.card{background:#fff;border-radius:12px;padding:15px;margin-bottom:15px;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+.booking{display:flex;gap:8px;margin-top:8px}
 select,input{padding:8px;border:1px solid #ccc;border-radius:6px}
-select{width:80px}
 input{flex:1}
-button{background:#16A34A;color:#fff;border:none;border-radius:6px;padding:8px 12px;cursor:pointer}
-.add{width:40px}
-.lock{background:#374151}
-table{width:100%;border-collapse:collapse}
-th,td{border:1px solid #ddd;padding:6px}
+button{padding:8px 12px;border:none;border-radius:6px;color:#fff;cursor:pointer}
+.save{background:#16A34A}
+.edit{background:#2563EB}
+.del{background:#DC2626}
+table{width:100%;border-collapse:collapse;margin-top:10px}
+th,td{border:1px solid #ddd;padding:6px;text-align:center}
 th{background:#F59E0B;color:#fff}
-.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);justify-content:center;align-items:center}
-.box{background:#fff;padding:20px;border-radius:10px;width:300px}
-footer{text-align:center;padding:16px;color:#666}
+.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);justify-content:center;align-items:center}
+.box{background:#fff;padding:20px;border-radius:10px;width:280px}
 </style>
 </head>
 <body>
@@ -32,43 +30,25 @@ footer{text-align:center;padding:16px;color:#666}
 <header>
 <div class="logo"><small>अविनाश</small>अतुल्य</div>
 <h2>🪔 श्री गणेश चतुर्थी उत्सव 2026</h2>
-<h3>10 दिवसीय आरती एवं प्रसाद अर्पण कार्यक्रम</h3>
-<p>14 सितम्बर 2026 (सायंकाल) – 24 सितम्बर 2026</p>
+<h3>आरती एवं प्रसाद अर्पण कार्यक्रम</h3>
+<p>14 सितम्बर (सायंकाल) – 24 सितम्बर 2026</p>
 </header>
 
-<div class="container">
-<div style="text-align:right;margin-bottom:10px">
-<button class="lock" onclick="showReport()">Admin Report</button>
-</div>
-
-<div id="schedule"></div>
-</div>
+<div class="container" id="app"></div>
 
 <div id="admin" class="modal">
 <div class="box">
-<h3>🔒 Admin Password</h3>
-<input id="pwd" type="password" placeholder="Enter Password">
+<h3>🔒 Admin Verification</h3>
+<input type="password" id="pwd" placeholder="Password">
 <div style="margin-top:12px;text-align:right">
-<button class="lock" onclick="closeAdmin()">Cancel</button>
-<button onclick="verify()">Unlock</button>
+<button onclick="closeBox()" style="background:#6B7280">Cancel</button>
+<button onclick="verify()" class="save">Unlock</button>
 </div>
 </div>
 </div>
-
-<div id="report" class="modal">
-<div class="box" style="width:90%;max-width:700px">
-<div style="display:flex;justify-content:space-between">
-<h3>Ganesh Report</h3>
-<button class="lock" onclick="closeReport()">Close</button>
-</div>
-<div id="reportData"></div>
-</div>
-</div>
-
-<footer>Designed by <b>D404</b></footer>
 
 <script>
-const PASSWORD="D404";
+const PASS="D404";
 const KEY="GANESH2026";
 
 const dates=[
@@ -85,169 +65,147 @@ const dates=[
 ["24.09.2026",true,true]
 ];
 
-let admin=false;
-let pending=null;
-
-let data=JSON.parse(localStorage.getItem(KEY));
-
-if(!data){
-data=dates.map(d=>({
-date:d[0],
-morning:d[1]?[{block:"A",flat:""}]:null,
-evening:[{block:"A",flat:""}]
-}));
+let roster=JSON.parse(localStorage.getItem(KEY)||"null");
+if(!roster){
+roster=dates.map(d=>({date:d[0],morning:[],evening:[]}));
 }
 
-function save(){
-localStorage.setItem(KEY,JSON.stringify(data));
+let action=null;
+
+function saveData(){
+localStorage.setItem(KEY,JSON.stringify(roster));
 }
 
 function render(){
 
-const wrap=document.getElementById("schedule");
-wrap.innerHTML="";
+let html="";
 
-data.forEach((d,i)=>{
+roster.forEach((d,i)=>{
 
-let html=`<div class="day">
+html+=`<div class="card">
 <h3 style="color:#B45309">${d.date}</h3>`;
 
-if(d.morning){
-html+=`<div class="slot"><b>🌞 Morning</b>`;
-d.morning.forEach((r,x)=>{
-html+=row(i,"morning",x,r);
-});
-html+=`</div>`;
-}
+if(i>0){
 
-html+=`<div class="slot"><b>🌙 Evening</b>`;
-d.evening.forEach((r,x)=>{
-html+=row(i,"evening",x,r);
-});
-if(i===10)
-html+=`<p style="color:#B91C1C;font-weight:bold">🌺 विसर्जन एवं महाआरती</p>`;
-html+=`</div></div>`;
-
-wrap.innerHTML+=html;
-
-});
-
-buildReport();
-
-}
-
-function row(day,slot,index,r){
-
-return `<div class="row">
-<select onchange="edit(${day},'${slot}',${index},'block',this.value)">
-<option ${r.block=="A"?"selected":""}>A</option>
-<option ${r.block=="B"?"selected":""}>B</option>
-<option ${r.block=="C"?"selected":""}>C</option>
-<option ${r.block=="D"?"selected":""}>D</option>
+html+=`<b>🌞 Morning</b>
+<div class="booking">
+<select id="mb${i}">
+<option>A</option><option>B</option><option>C</option><option>D</option>
 </select>
-
-<input value="${r.flat}" placeholder="Flat No."
-oninput="edit(${day},'${slot}',${index},'flat',this.value)"
-${admin?"":"readonly"}>
-
-<button class="add" onclick="addRow(${day},'${slot}')">+</button>
-
+<input id="mf${i}" placeholder="Flat No.">
+<button class="save" onclick="add(${i},'morning')">Save</button>
 </div>`;
 
+html+=table(d.morning,i,"morning");
+
 }
 
-function addRow(day,slot){
+html+=`<br><b>🌙 Evening</b>
+<div class="booking">
+<select id="eb${i}">
+<option>A</option><option>B</option><option>C</option><option>D</option>
+</select>
+<input id="ef${i}" placeholder="Flat No.">
+<button class="save" onclick="add(${i},'evening')">Save</button>
+</div>`;
 
-data[day][slot].push({block:"A",flat:""});
-save();
+html+=table(d.evening,i,"evening");
+
+if(i==10)
+html+=`<p style="color:#B91C1C;font-weight:bold">🌺 विसर्जन एवं महाआरती</p>`;
+
+html+="</div>";
+
+});
+
+app.innerHTML=html;
+
+}
+
+function table(arr,day,slot){
+
+let t=`<table>
+<tr><th>Block</th><th>Flat</th><th>Action</th></tr>`;
+
+if(arr.length==0){
+t+=`<tr><td colspan="3">Available</td></tr>`;
+}else{
+arr.forEach((r,i)=>{
+t+=`<tr>
+<td>${r.block}</td>
+<td>${r.flat}</td>
+<td>
+<button class="edit" onclick="requestEdit(${day},'${slot}',${i})">Edit</button>
+<button class="del" onclick="requestDelete(${day},'${slot}',${i})">Del</button>
+</td>
+</tr>`;
+});
+}
+
+t+="</table>";
+return t;
+
+}
+
+function add(day,slot){
+
+const block=document.getElementById((slot=="morning"?"mb":"eb")+day).value;
+const flat=document.getElementById((slot=="morning"?"mf":"ef")+day).value;
+
+if(flat==""){
+alert("Enter Flat Number");
+return;
+}
+
+roster[day][slot].push({block,flat});
+saveData();
 render();
 
 }
 
-function edit(day,slot,index,field,val){
-
-if(!admin){
-pending={day,slot,index,field,val};
-document.getElementById("admin").style.display="flex";
-return;
+function requestEdit(day,slot,index){
+action={type:"edit",day,slot,index};
+admin.style.display="flex";
 }
 
-data[day][slot][index][field]=val;
-save();
-
+function requestDelete(day,slot,index){
+action={type:"delete",day,slot,index};
+admin.style.display="flex";
 }
 
 function verify(){
 
-if(document.getElementById("pwd").value!==PASSWORD){
+if(pwd.value!=PASS){
 alert("Wrong Password");
 return;
 }
 
-admin=true;
-document.getElementById("admin").style.display="none";
+if(action.type=="delete"){
 
-if(pending){
-data[pending.day][pending.slot][pending.index][pending.field]=pending.val;
-pending=null;
-save();
+roster[action.day][action.slot].splice(action.index,1);
+
+}else{
+
+const r=roster[action.day][action.slot][action.index];
+const nb=prompt("Block",r.block);
+const nf=prompt("Flat No",r.flat);
+
+if(nb&&nf){
+r.block=nb;
+r.flat=nf;
+}
+
+}
+
+saveData();
+closeBox();
 render();
-}
 
 }
 
-function closeAdmin(){
-document.getElementById("admin").style.display="none";
-}
-
-function buildReport(){
-
-let t=`<table>
-<tr><th>Date</th><th>Morning</th><th>Evening</th></tr>`;
-
-data.forEach(d=>{
-
-const m=(d.morning||[]).map(x=>x.block+"-"+x.flat).join("<br>");
-const e=d.evening.map(x=>x.block+"-"+x.flat).join("<br>");
-
-t+=`<tr>
-<td>${d.date}</td>
-<td>${m}</td>
-<td>${e}</td>
-</tr>`;
-
-});
-
-t+="</table>";
-
-document.getElementById("reportData").innerHTML=t;
-
-}
-
-function showReport(){
-
-document.getElementById("admin").style.display="flex";
-
-const old=verify;
-
-verify=function(){
-
-if(document.getElementById("pwd").value!==PASSWORD){
-alert("Wrong Password");
-return;
-}
-
-admin=true;
-document.getElementById("admin").style.display="none";
-document.getElementById("report").style.display="flex";
-verify=old;
-
-};
-
-}
-
-function closeReport(){
-document.getElementById("report").style.display="none";
+function closeBox(){
+admin.style.display="none";
+pwd.value="";
 }
 
 render();
@@ -255,4 +213,3 @@ render();
 
 </body>
 </html>
-
