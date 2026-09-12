@@ -58,7 +58,7 @@ footer{text-align:center;padding:18px;color:#666}
 <footer>Designed by <b>D404</b></footer>
 
 <script>
-const SCRIPT_URL="https://script.google.com/macros/s/AKfycbyGcwRzXvdR0Qt4ffusnTEVp8U1CwnvGIIfOidq9ZmMpz6hS6W6LNXTLyhnTEMXtK0z/exec";
+async function saveBooking(date,session){   const id=sid(date,session);   const block=document.getElementById("b"+id).value;  const flat=document.getElementById("f"+id).value.trim();   if(flat===""){    alert("Please enter Flat Number");    return;  }   try{     const response=await fetch(SCRIPT_URL,{      method:"POST",      headers:{        "Content-Type":"text/plain;charset=utf-8"      },      body:JSON.stringify({        mode:"add",        date:date,        session:session,        block:block,        flat:flat      })    });     const result=await response.text();     document.getElementById("f"+id).value="";    editing=false;     await loadRoster();     alert("Booking Saved Successfully");   }catch(err){     alert("Unable to connect to Google Sheet");   }  }
 const ADMIN="D404";
 
 const DAYS=[
