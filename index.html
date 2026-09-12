@@ -1,4 +1,6 @@
-<!DOCTYPE html>
+function safeId(date, session) {
+  return (date + "_" + session).replace(/[^a-zA-Z0-9]/g, "_");
+}<!DOCTYPE html>
 <html lang="hi">
 <head>
 <meta charset="UTF-8">
@@ -163,15 +165,14 @@ let h=`
 <b>${session==="Morning"?"🌞 Morning":"🌙 Evening"}</b>
 
 <div class="row">
-<select id="b${date}${session}">
+<select id="b${safeId(date,session)}">
 <option>A</option>
 <option>B</option>
 <option>C</option>
 <option>D</option>
 </select>
 
-<input id="f${date}${session}" placeholder="Flat Number">
-
+<input id="f${safeId(date,session)}" placeholder="Flat Number">
 <button class="save"
 onclick="saveBooking('${date}','${session}')">
 Save
@@ -220,32 +221,33 @@ return h;
 
 }
 
-async function saveBooking(date,session){
+async function saveBooking(date, session) {
 
-const block=document.getElementById("b"+date+session).value;
-const flat=document.getElementById("f"+date+session).value.trim();
+  const id = safeId(date, session);
 
-if(flat===""){
-alert("Enter Flat Number");
-return;
+  const block = document.getElementById("b"+id).value;
+  const flat  = document.getElementById("f"+id).value.trim();
+
+  if(flat===""){
+    alert("Please enter Flat Number");
+    return;
+  }
+
+  await fetch(SCRIPT_URL,{
+    method:"POST",
+    body:JSON.stringify({
+      mode:"add",
+      date,
+      session,
+      block,
+      flat
+    })
+  });
+
+  document.getElementById("f"+id).value="";
+  loadRoster();
 }
 
-await fetch(SCRIPT_URL,{
-method:"POST",
-body:JSON.stringify({
-mode:"add",
-date,
-session,
-block,
-flat
-})
-});
-
-document.getElementById("f"+date+session).value="";
-
-loadRoster();
-
-}
 
 function requestEdit(id){
 action={mode:"edit",id};
