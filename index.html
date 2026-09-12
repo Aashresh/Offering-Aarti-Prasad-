@@ -1,4 +1,15 @@
+<select id="b${id}"
+        onchange="draft['${id}_b']=this.value; editing=true;">
+  <option>A</option>
+  <option>B</option>
+  <option>C</option>
+  <option>D</option>
+</select>
 
+<input id="f${id}"
+       placeholder="Flat Number"
+       value="${draft[id]||''}"
+       oninput="draft['${id}']=this.value; editing=true;">
 <!DOCTYPE html>
 <html lang="hi">
 <head>
@@ -207,7 +218,11 @@ function adminReport(){
 }
 
 loadRoster();
-setInterval(()=>{ if(!typing) loadRoster(); },3000);
+setInterval(() => {
+  if (!editing) {
+    loadRoster();
+  }
+}, 3000);
 </script>
 
 </body>
