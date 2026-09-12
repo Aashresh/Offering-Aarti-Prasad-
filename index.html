@@ -1,124 +1,252 @@
-function safeId(date, session) {
-  return (date + "_" + session).replace(/[^a-zA-Z0-9]/g, "_");
-}<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="hi">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Avinash Atulya Ganesh Portal 2026</title>
+
 <style>
 *{box-sizing:border-box}
-body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#FFF7ED}
+body{
+    margin:0;
+    font-family:Arial,Helvetica,sans-serif;
+    background:#FFF7ED;
+}
 header{
-background:linear-gradient(135deg,#D97706,#F59E0B,#FDE68A);
-color:#fff;padding:20px;text-align:center}
+    background:linear-gradient(135deg,#D97706,#F59E0B,#FDE68A);
+    color:#fff;
+    text-align:center;
+    padding:20px;
+}
 .logo{
-display:inline-block;background:#fff;color:#65A30D;
-padding:8px 18px;border-radius:12px;
-font-size:28px;font-weight:bold}
-.logo small{display:block;color:#2563EB;font-size:12px}
-.container{max-width:950px;margin:auto;padding:15px}
+    display:inline-block;
+    background:#fff;
+    color:#65A30D;
+    padding:8px 18px;
+    border-radius:12px;
+    font-size:30px;
+    font-weight:bold;
+}
+.logo small{
+    display:block;
+    color:#2563EB;
+    font-size:12px;
+}
+.container{
+    max-width:960px;
+    margin:auto;
+    padding:15px;
+}
 .card{
-background:#fff;border-radius:14px;padding:15px;
-margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,.08)}
-.title{color:#B45309;font-weight:bold;font-size:18px}
-.section{margin-top:12px}
-.row{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+    background:#fff;
+    border-radius:14px;
+    padding:15px;
+    margin-bottom:18px;
+    box-shadow:0 2px 8px rgba(0,0,0,.08);
+}
+.date{
+    color:#B45309;
+    font-size:18px;
+    font-weight:bold;
+}
+.section{
+    margin-top:15px;
+}
+.row{
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+    margin-top:8px;
+}
 select,input{
-padding:9px;border:1px solid #D1D5DB;border-radius:8px}
+    padding:9px;
+    border:1px solid #D1D5DB;
+    border-radius:8px;
+}
 select{width:90px}
 input{flex:1}
 button{
-border:none;border-radius:8px;padding:9px 14px;
-cursor:pointer;color:#fff;font-weight:bold}
+    border:none;
+    border-radius:8px;
+    padding:9px 14px;
+    color:#fff;
+    cursor:pointer;
+    font-weight:bold;
+}
 .save{background:#16A34A}
 .edit{background:#2563EB}
 .del{background:#DC2626}
 .report{background:#92400E}
-table{width:100%;border-collapse:collapse;margin-top:10px}
-th,td{border:1px solid #E5E7EB;padding:8px;text-align:center}
-th{background:#F59E0B;color:#fff}
-.empty{color:#9CA3AF;padding:10px}
+table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:10px;
+}
+th,td{
+    border:1px solid #E5E7EB;
+    padding:8px;
+    text-align:center;
+}
+th{
+    background:#F59E0B;
+    color:#fff;
+}
+.empty{
+    padding:10px;
+    color:#9CA3AF;
+}
 .modal{
-display:none;position:fixed;inset:0;
-background:rgba(0,0,0,.5);
-justify-content:center;align-items:center}
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.5);
+    justify-content:center;
+    align-items:center;
+}
 .box{
-background:#fff;padding:20px;border-radius:12px;
-width:320px}
-footer{text-align:center;padding:15px;color:#6B7280}
+    background:#fff;
+    width:320px;
+    border-radius:12px;
+    padding:20px;
+}
+footer{
+    text-align:center;
+    padding:18px;
+    color:#666;
+}
 </style>
+
 </head>
 <body>
 
 <header>
-<div class="logo"><small>अविनाश</small>अतुल्य</div>
+
+<div class="logo">
+<small>अविनाश</small>
+अतुल्य
+</div>
+
 <h2>🪔 श्री गणेश चतुर्थी उत्सव 2026</h2>
+
 <h3>10 दिवसीय आरती एवं प्रसाद अर्पण कार्यक्रम</h3>
+
 <p>14 सितम्बर 2026 (Monday) – 24 सितम्बर 2026 (Thursday)</p>
+
 </header>
 
 <div class="container">
+
 <div style="text-align:right;margin-bottom:10px">
 <button class="report" onclick="openReport()">📊 Admin Report</button>
 </div>
 
 <div id="schedule"></div>
+
 </div>
 
 <div id="adminModal" class="modal">
+
 <div class="box">
+
 <h3>🔒 Admin Password</h3>
-<input type="password" id="pwd" placeholder="Enter Password" style="width:100%;margin-top:10px">
+
+<input id="pwd" type="password" placeholder="Enter Password" style="width:100%;margin-top:10px">
+
 <div style="display:flex;justify-content:end;gap:8px;margin-top:15px">
+
 <button style="background:#6B7280" onclick="closeAdmin()">Cancel</button>
+
 <button class="save" onclick="verify()">Unlock</button>
+
 </div>
+
 </div>
+
 </div>
 
 <div id="reportModal" class="modal">
+
 <div class="box" style="width:90%;max-width:700px">
+
 <div style="display:flex;justify-content:space-between">
+
 <h3>Ganesh Booking Report</h3>
+
 <button style="background:#6B7280" onclick="closeReport()">Close</button>
+
 </div>
+
 <div id="reportBody"></div>
+
 </div>
+
 </div>
 
 <footer>
+
 Designed by <b>D404</b>
+
 </footer>
 
 <script>
+
 const SCRIPT_URL="https://script.google.com/macros/s/AKfycbyGcwRzXvdR0Qt4ffusnTEVp8U1CwnvGIIfOidq9ZmMpz6hS6W6LNXTLyhnTEMXtK0z/exec";
 const PASSWORD="D404";
 
 const dates=[
+
 ["14.09.2026","Monday",false,true],
+
 ["15.09.2026","Tuesday",true,true],
+
 ["16.09.2026","Wednesday",true,true],
+
 ["17.09.2026","Thursday",true,true],
+
 ["18.09.2026","Friday",true,true],
+
 ["19.09.2026","Saturday",true,true],
+
 ["20.09.2026","Sunday",true,true],
+
 ["21.09.2026","Monday",true,true],
+
 ["22.09.2026","Tuesday",true,true],
+
 ["23.09.2026","Wednesday",true,true],
+
 ["24.09.2026","Thursday",true,true]
+
 ];
 
 let roster=[];
+
 let action=null;
+
 let reportMode=false;
 
+function safeId(date,session){
+
+return (date+"_"+session).replace(/[^A-Za-z0-9]/g,"_");
+
+}
+
 async function loadRoster(){
+
 try{
+
 const r=await fetch(SCRIPT_URL);
+
 roster=await r.json();
+
 render();
-}catch(e){}
+
+}catch(e){
+
+console.log(e);
+
+}
+
 }
 
 function render(){
@@ -128,25 +256,26 @@ let html="";
 dates.forEach(d=>{
 
 const date=d[0];
+
 const day=d[1];
 
-html+=`
-<div class="card">
-<div class="title">${date} (${day})</div>`;
+html+=`<div class="card"><div class="date">${date} (${day})</div>`;
 
-if(d[2]){
-html+=section(date,"Morning");
-}
+if(d[2]) html+=section(date,"Morning");
 
 html+=section(date,"Evening");
 
 if(date==="24.09.2026"){
+
 html+=`<p style="color:#B91C1C;font-weight:bold">
+
 🌺 विसर्जन एवं महाआरती
+
 </p>`;
+
 }
 
-html+=`</div>`;
+html+="</div>";
 
 });
 
@@ -158,24 +287,36 @@ buildReport();
 
 function section(date,session){
 
-const rows=roster.filter(x=>x.date===date && x.session===session);
+const rows=roster.filter(r=>r.date===date && r.session===session);
 
-let h=`
-<div class="section">
+const id=safeId(date,session);
+
+let h=`<div class="section">
+
 <b>${session==="Morning"?"🌞 Morning":"🌙 Evening"}</b>
 
 <div class="row">
-<select id="b${safeId(date,session)}">
+
+<select id="b${id}">
+
 <option>A</option>
+
 <option>B</option>
+
 <option>C</option>
+
 <option>D</option>
+
 </select>
 
-<input id="f${safeId(date,session)}" placeholder="Flat Number">
+<input id="f${id}" placeholder="Flat Number">
+
 <button class="save"
+
 onclick="saveBooking('${date}','${session}')">
+
 Save
+
 </button>
 
 </div>`;
@@ -186,27 +327,46 @@ h+=`<div class="empty">No booking yet</div>`;
 
 }else{
 
-h+=`
-<table>
+h+=`<table>
+
 <tr>
+
 <th>Block</th>
+
 <th>Flat</th>
+
 <th>Action</th>
+
 </tr>`;
 
 rows.forEach(r=>{
 
-h+=`
-<tr>
+h+=`<tr>
+
 <td>${r.block}</td>
+
 <td>${r.flat}</td>
+
 <td>
+
 <button class="edit"
-onclick="requestEdit('${r.id}')">Edit</button>
+
+onclick="requestEdit('${r.id}')">
+
+Edit
+
+</button>
 
 <button class="del"
-onclick="requestDelete('${r.id}')">Delete</button>
+
+onclick="requestDelete('${r.id}')">
+
+Delete
+
+</button>
+
 </td>
+
 </tr>`;
 
 });
@@ -221,68 +381,102 @@ return h;
 
 }
 
-async function saveBooking(date, session) {
+async function saveBooking(date,session){
 
-  const id = safeId(date, session);
+const id=safeId(date,session);
 
-  const block = document.getElementById("b"+id).value;
-  const flat  = document.getElementById("f"+id).value.trim();
+const block=document.getElementById("b"+id).value;
 
-  if(flat===""){
-    alert("Please enter Flat Number");
-    return;
-  }
+const flat=document.getElementById("f"+id).value.trim();
 
-  await fetch(SCRIPT_URL,{
-    method:"POST",
-    body:JSON.stringify({
-      mode:"add",
-      date,
-      session,
-      block,
-      flat
-    })
-  });
+if(flat===""){
 
-  document.getElementById("f"+id).value="";
-  loadRoster();
+alert("Please enter Flat Number");
+
+return;
+
 }
 
+await fetch(SCRIPT_URL,{
+
+method:"POST",
+
+body:JSON.stringify({
+
+mode:"add",
+
+date,
+
+session,
+
+block,
+
+flat
+
+})
+
+});
+
+document.getElementById("f"+id).value="";
+
+loadRoster();
+
+}
 
 function requestEdit(id){
+
 action={mode:"edit",id};
+
 reportMode=false;
+
 document.getElementById("adminModal").style.display="flex";
+
 }
 
 function requestDelete(id){
+
 action={mode:"delete",id};
+
 reportMode=false;
+
 document.getElementById("adminModal").style.display="flex";
+
 }
 
 function openReport(){
+
 reportMode=true;
+
 document.getElementById("adminModal").style.display="flex";
+
 }
 
 function closeAdmin(){
+
 document.getElementById("adminModal").style.display="none";
+
 document.getElementById("pwd").value="";
+
 }
 
 async function verify(){
 
 if(document.getElementById("pwd").value!==PASSWORD){
+
 alert("Wrong Password");
+
 return;
+
 }
 
 closeAdmin();
 
 if(reportMode){
+
 document.getElementById("reportModal").style.display="flex";
+
 return;
+
 }
 
 if(action.mode==="edit"){
@@ -290,18 +484,27 @@ if(action.mode==="edit"){
 const row=roster.find(x=>x.id===action.id);
 
 const block=prompt("Block",row.block);
+
 const flat=prompt("Flat Number",row.flat);
 
-if(block===null||flat===null)return;
+if(block===null || flat===null) return;
 
 await fetch(SCRIPT_URL,{
+
 method:"POST",
+
 body:JSON.stringify({
+
 mode:"edit",
+
 id:row.id,
+
 block,
+
 flat
+
 })
+
 });
 
 }
@@ -311,11 +514,17 @@ if(action.mode==="delete"){
 if(confirm("Delete this booking?")){
 
 await fetch(SCRIPT_URL,{
+
 method:"POST",
+
 body:JSON.stringify({
+
 mode:"delete",
+
 id:action.id
+
 })
+
 });
 
 }
@@ -328,26 +537,36 @@ loadRoster();
 
 function buildReport(){
 
-let t=`
-<table>
+let t=`<table>
+
 <tr>
+
 <th>Date</th>
+
 <th>Morning</th>
+
 <th>Evening</th>
+
 <th>Total</th>
+
 </tr>`;
 
 dates.forEach(d=>{
 
-const m=roster.filter(x=>x.date===d[0]&&x.session==="Morning").length;
-const e=roster.filter(x=>x.date===d[0]&&x.session==="Evening").length;
+const m=roster.filter(x=>x.date===d[0] && x.session==="Morning").length;
 
-t+=`
-<tr>
+const e=roster.filter(x=>x.date===d[0] && x.session==="Evening").length;
+
+t+=`<tr>
+
 <td>${d[0]}</td>
+
 <td>${m}</td>
+
 <td>${e}</td>
+
 <td>${m+e}</td>
+
 </tr>`;
 
 });
@@ -359,10 +578,13 @@ document.getElementById("reportBody").innerHTML=t;
 }
 
 function closeReport(){
+
 document.getElementById("reportModal").style.display="none";
+
 }
 
 loadRoster();
+
 setInterval(loadRoster,3000);
 
 </script>
