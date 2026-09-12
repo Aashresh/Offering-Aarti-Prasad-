@@ -162,7 +162,10 @@ async function saveBooking(date,session){
      date,session,block,flat
    })
  });
-
+draft[id] = "";
+draft[id+"_b"] = "A";
+editing = false;
+await loadRoster();
  document.getElementById("f"+id).value="";
  typing=false;
  await loadRoster();
