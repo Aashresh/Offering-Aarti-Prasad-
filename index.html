@@ -1,611 +1,208 @@
+
 <!DOCTYPE html>
-<html lang="hi">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Avinash Atulya Ganesh Portal 2026</title>
-
 <style>
-*{box-sizing:border-box}
-body{
-    margin:0;
-    font-family:Arial,Helvetica,sans-serif;
-    background:#FFF7ED;
-}
-header{
-    background:linear-gradient(135deg,#D97706,#F59E0B,#FDE68A);
-    color:#fff;
-    text-align:center;
-    padding:20px;
-}
-.logo{
-    display:inline-block;
-    background:#fff;
-    color:#65A30D;
-    padding:8px 18px;
-    border-radius:12px;
-    font-size:30px;
-    font-weight:bold;
-}
-.logo small{
-    display:block;
-    color:#2563EB;
-    font-size:12px;
-}
-.container{
-    max-width:960px;
-    margin:auto;
-    padding:15px;
-}
-.card{
-    background:#fff;
-    border-radius:14px;
-    padding:15px;
-    margin-bottom:18px;
-    box-shadow:0 2px 8px rgba(0,0,0,.08);
-}
-.date{
-    color:#B45309;
-    font-size:18px;
-    font-weight:bold;
-}
-.section{
-    margin-top:15px;
-}
-.row{
-    display:flex;
-    gap:8px;
-    flex-wrap:wrap;
-    margin-top:8px;
-}
-select,input{
-    padding:9px;
-    border:1px solid #D1D5DB;
-    border-radius:8px;
-}
+body{font-family:Arial;margin:0;background:#FFF8EC}
+header{background:linear-gradient(135deg,#D97706,#F59E0B,#FDE68A);color:#fff;text-align:center;padding:20px}
+.logo{display:inline-block;background:#fff;color:#65A30D;padding:8px 18px;border-radius:10px;font-size:28px;font-weight:bold}
+.logo small{display:block;color:#2563EB;font-size:12px}
+.wrap{max-width:950px;margin:auto;padding:15px}
+.card{background:#fff;border-radius:12px;padding:15px;margin-bottom:15px;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+.row{display:flex;gap:8px;flex-wrap:wrap}
+select,input{padding:8px;border:1px solid #ccc;border-radius:6px}
 select{width:90px}
 input{flex:1}
-button{
-    border:none;
-    border-radius:8px;
-    padding:9px 14px;
-    color:#fff;
-    cursor:pointer;
-    font-weight:bold;
-}
-.save{background:#16A34A}
-.edit{background:#2563EB}
-.del{background:#DC2626}
-.report{background:#92400E}
-table{
-    width:100%;
-    border-collapse:collapse;
-    margin-top:10px;
-}
-th,td{
-    border:1px solid #E5E7EB;
-    padding:8px;
-    text-align:center;
-}
-th{
-    background:#F59E0B;
-    color:#fff;
-}
-.empty{
-    padding:10px;
-    color:#9CA3AF;
-}
-.modal{
-    display:none;
-    position:fixed;
-    inset:0;
-    background:rgba(0,0,0,.5);
-    justify-content:center;
-    align-items:center;
-}
-.box{
-    background:#fff;
-    width:320px;
-    border-radius:12px;
-    padding:20px;
-}
-footer{
-    text-align:center;
-    padding:18px;
-    color:#666;
-}
+button{border:none;border-radius:6px;padding:8px 12px;color:#fff;cursor:pointer}
+.save{background:#16A34A}.edit{background:#2563EB}.del{background:#DC2626}.report{background:#92400E}
+table{width:100%;border-collapse:collapse;margin-top:8px}
+th,td{border:1px solid #ddd;padding:6px;text-align:center}
+th{background:#F59E0B;color:#fff}
+footer{text-align:center;padding:15px;color:#666}
 </style>
-
 </head>
 <body>
 
 <header>
-
-<div class="logo">
-<small>अविनाश</small>
-अतुल्य
-</div>
-
+<div class="logo"><small>अविनाश</small>अतुल्य</div>
 <h2>🪔 श्री गणेश चतुर्थी उत्सव 2026</h2>
-
-<h3>10 दिवसीय आरती एवं प्रसाद अर्पण कार्यक्रम</h3>
-
+<h3>आरती एवं प्रसाद अर्पण कार्यक्रम</h3>
 <p>14 सितम्बर 2026 (Monday) – 24 सितम्बर 2026 (Thursday)</p>
-
 </header>
 
-<div class="container">
-
+<div class="wrap">
 <div style="text-align:right;margin-bottom:10px">
-<button class="report" onclick="openReport()">📊 Admin Report</button>
+<button class="report" onclick="report()">📊 Admin Report</button>
+</div>
+<div id="app"></div>
 </div>
 
-<div id="schedule"></div>
-
-</div>
-
-<div id="adminModal" class="modal">
-
-<div class="box">
-
-<h3>🔒 Admin Password</h3>
-
-<input id="pwd" type="password" placeholder="Enter Password" style="width:100%;margin-top:10px">
-
-<div style="display:flex;justify-content:end;gap:8px;margin-top:15px">
-
-<button style="background:#6B7280" onclick="closeAdmin()">Cancel</button>
-
-<button class="save" onclick="verify()">Unlock</button>
-
-</div>
-
-</div>
-
-</div>
-
-<div id="reportModal" class="modal">
-
-<div class="box" style="width:90%;max-width:700px">
-
-<div style="display:flex;justify-content:space-between">
-
-<h3>Ganesh Booking Report</h3>
-
-<button style="background:#6B7280" onclick="closeReport()">Close</button>
-
-</div>
-
-<div id="reportBody"></div>
-
-</div>
-
-</div>
-
-<footer>
-
-Designed by <b>D404</b>
-
-</footer>
+<footer>Designed by D404</footer>
 
 <script>
-
+// ===== REPLACE WITH YOUR APPS SCRIPT URL =====
 const SCRIPT_URL="https://script.google.com/macros/s/AKfycbyGcwRzXvdR0Qt4ffusnTEVp8U1CwnvGIIfOidq9ZmMpz6hS6W6LNXTLyhnTEMXtK0z/exec";
 const PASSWORD="D404";
 
 const dates=[
-
-["14.09.2026","Monday",false,true],
-
-["15.09.2026","Tuesday",true,true],
-
-["16.09.2026","Wednesday",true,true],
-
-["17.09.2026","Thursday",true,true],
-
-["18.09.2026","Friday",true,true],
-
-["19.09.2026","Saturday",true,true],
-
-["20.09.2026","Sunday",true,true],
-
-["21.09.2026","Monday",true,true],
-
-["22.09.2026","Tuesday",true,true],
-
-["23.09.2026","Wednesday",true,true],
-
-["24.09.2026","Thursday",true,true]
-
+["14.09.2026","Monday",0,1],
+["15.09.2026","Tuesday",1,1],
+["16.09.2026","Wednesday",1,1],
+["17.09.2026","Thursday",1,1],
+["18.09.2026","Friday",1,1],
+["19.09.2026","Saturday",1,1],
+["20.09.2026","Sunday",1,1],
+["21.09.2026","Monday",1,1],
+["22.09.2026","Tuesday",1,1],
+["23.09.2026","Wednesday",1,1],
+["24.09.2026","Thursday",1,1]
 ];
 
 let roster=[];
 
-let action=null;
+const sid=(d,s)=>(d+"_"+s).replace(/[^A-Za-z0-9]/g,"_");
 
-let reportMode=false;
-
-function safeId(date,session){
-
-return (date+"_"+session).replace(/[^A-Za-z0-9]/g,"_");
-
-}
-
-async function loadRoster(){
-
+async function load(){
 try{
-
 const r=await fetch(SCRIPT_URL);
-
 roster=await r.json();
-
-render();
-
-}catch(e){
-
-console.log(e);
-
+draw();
+}catch(e){}
 }
 
+function list(date,session){
+return roster.filter(x=>x.date===date && x.session===session);
 }
 
-function render(){
-
-let html="";
-
+function draw(){
+let h="";
 dates.forEach(d=>{
+h+=`<div class="card">
+<h3 style="color:#B45309">${d[0]} (${d[1]})</h3>`;
 
-const date=d[0];
+if(d[2]) h+=slot(d[0],"Morning","🌞");
+h+=slot(d[0],"Evening","🌙");
 
-const day=d[1];
+if(d[0]=="24.09.2026")
+h+=`<p style="color:#B91C1C;font-weight:bold">🌺 विसर्जन एवं महाआरती</p>`;
 
-html+=`<div class="card"><div class="date">${date} (${day})</div>`;
-
-if(d[2]) html+=section(date,"Morning");
-
-html+=section(date,"Evening");
-
-if(date==="24.09.2026"){
-
-html+=`<p style="color:#B91C1C;font-weight:bold">
-
-🌺 विसर्जन एवं महाआरती
-
-</p>`;
-
-}
-
-html+="</div>";
-
+h+="</div>";
 });
-
-document.getElementById("schedule").innerHTML=html;
-
-buildReport();
-
+app.innerHTML=h;
 }
 
-function section(date,session){
+function slot(date,session,icon){
+const id=sid(date,session);
+const rows=list(date,session);
 
-const rows=roster.filter(r=>r.date===date && r.session===session);
+let t=`<div style="margin-top:10px">
+<b>${icon} ${session}</b>
 
-const id=safeId(date,session);
-
-let h=`<div class="section">
-
-<b>${session==="Morning"?"🌞 Morning":"🌙 Evening"}</b>
-
-<div class="row">
-
+<div class="row" style="margin-top:8px">
 <select id="b${id}">
-
-<option>A</option>
-
-<option>B</option>
-
-<option>C</option>
-
-<option>D</option>
-
+<option>A</option><option>B</option><option>C</option><option>D</option>
 </select>
 
 <input id="f${id}" placeholder="Flat Number">
 
-<button class="save"
-
-onclick="saveBooking('${date}','${session}')">
-
-Save </button>
-document.getElementById("f"+id).value = "";
-loadRoster();
-
-
+<button class="save" onclick="save('${date}','${session}')">Save</button>
 </div>`;
 
-if(rows.length===0){
-
-h+=`<div class="empty">No booking yet</div>`;
-
+if(rows.length==0){
+t+="<p style='color:#999'>No booking yet</p>";
 }else{
-
-h+=`<table>
-
-<tr>
-
-<th>Block</th>
-
-<th>Flat</th>
-
-<th>Action</th>
-
-</tr>`;
-
+t+="<table><tr><th>Block</th><th>Flat</th><th>Action</th></tr>";
 rows.forEach(r=>{
-
-h+=`<tr>
-
+t+=`<tr>
 <td>${r.block}</td>
-
 <td>${r.flat}</td>
-
 <td>
-
-<button class="edit"
-
-onclick="requestEdit('${r.id}')">
-
-Edit
-
-</button>
-
-<button class="del"
-
-onclick="requestDelete('${r.id}')">
-
-Delete
-
-</button>
-
+<button class="edit" onclick="edit('${r.id}')">Edit</button>
+<button class="del" onclick="del('${r.id}')">Delete</button>
 </td>
-
 </tr>`;
-
 });
-
-h+="</table>";
-
+t+="</table>";
 }
 
-h+="</div>";
-
-return h;
-
+return t+"</div>";
 }
 
-async function saveBooking(date,session){
-
-const id=safeId(date,session);
-
+async function save(date,session){
+const id=sid(date,session);
 const block=document.getElementById("b"+id).value;
-
 const flat=document.getElementById("f"+id).value.trim();
 
-if(flat===""){
-
-alert("Please enter Flat Number");
-
-return;
-
-}
+if(flat==""){alert("Enter Flat Number");return;}
 
 await fetch(SCRIPT_URL,{
-
 method:"POST",
-
 body:JSON.stringify({
-
 mode:"add",
-
-date,
-
-session,
-
-block,
-
-flat
-
+date,session,block,flat
 })
-
 });
 
 document.getElementById("f"+id).value="";
-
-loadRoster();
-
+load();
 }
 
-function requestEdit(id){
+async function edit(id){
+if(prompt("Admin Password")!==PASSWORD) return;
 
-action={mode:"edit",id};
+const r=roster.find(x=>x.id===id);
+const b=prompt("Block",r.block);
+const f=prompt("Flat Number",r.flat);
 
-reportMode=false;
-
-document.getElementById("adminModal").style.display="flex";
-
-}
-
-function requestDelete(id){
-
-action={mode:"delete",id};
-
-reportMode=false;
-
-document.getElementById("adminModal").style.display="flex";
-
-}
-
-function openReport(){
-
-reportMode=true;
-
-document.getElementById("adminModal").style.display="flex";
-
-}
-
-function closeAdmin(){
-
-document.getElementById("adminModal").style.display="none";
-
-document.getElementById("pwd").value="";
-
-}
-
-async function verify(){
-
-if(document.getElementById("pwd").value!==PASSWORD){
-
-alert("Wrong Password");
-
-return;
-
-}
-
-closeAdmin();
-
-if(reportMode){
-
-document.getElementById("reportModal").style.display="flex";
-
-return;
-
-}
-
-if(action.mode==="edit"){
-
-const row=roster.find(x=>x.id===action.id);
-
-const block=prompt("Block",row.block);
-
-const flat=prompt("Flat Number",row.flat);
-
-if(block===null || flat===null) return;
+if(b==null||f==null) return;
 
 await fetch(SCRIPT_URL,{
-
 method:"POST",
-
 body:JSON.stringify({
-
 mode:"edit",
-
-id:row.id,
-
-block,
-
-flat
-
+id,
+block:b,
+flat:f
 })
-
 });
 
+load();
 }
 
-if(action.mode==="delete"){
-
-if(confirm("Delete this booking?")){
+async function del(id){
+if(prompt("Admin Password")!==PASSWORD) return;
+if(!confirm("Delete booking?")) return;
 
 await fetch(SCRIPT_URL,{
-
 method:"POST",
-
 body:JSON.stringify({
-
 mode:"delete",
-
-id:action.id
-
+id
 })
-
 });
 
+load();
 }
 
-}
+function report(){
+if(prompt("Admin Password")!==PASSWORD) return;
 
-loadRoster();
-
-}
-
-function buildReport(){
-
-let t=`<table>
-
-<tr>
-
-<th>Date</th>
-
-<th>Morning</th>
-
-<th>Evening</th>
-
-<th>Total</th>
-
-</tr>`;
+let txt="GANESH BOOKING REPORT\n\n";
 
 dates.forEach(d=>{
-
-const m=roster.filter(x=>x.date===d[0] && x.session==="Morning").length;
-
-const e=roster.filter(x=>x.date===d[0] && x.session==="Evening").length;
-
-t+=`<tr>
-
-<td>${d[0]}</td>
-
-<td>${m}</td>
-
-<td>${e}</td>
-
-<td>${m+e}</td>
-
-</tr>`;
-
+const m=list(d[0],"Morning").length;
+const e=list(d[0],"Evening").length;
+txt+=`${d[0]} : Morning ${m} | Evening ${e} | Total ${m+e}\n`;
 });
 
-t+="</table>";
-
-document.getElementById("reportBody").innerHTML=t;
-
+alert(txt);
 }
 
-function closeReport(){
-
-document.getElementById("reportModal").style.display="none";
-
-}
-
-loadRoster();
-
-let typing = false;
-
-// Detect when user is typing
-document.addEventListener("input", (e) => {
-  if (e.target.tagName === "INPUT") {
-    typing = true;
-    clearTimeout(window.typingTimer);
-    window.typingTimer = setTimeout(() => {
-      typing = false;
-    }, 2000);
-  }
-});
-
-// Refresh only when not typing
-setInterval(() => {
-  if (!typing) {
-    loadRoster();
-  }
-}, 3000);
-
+load();
+setInterval(load,3000);
 </script>
 
 </body>
