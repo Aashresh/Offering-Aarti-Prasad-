@@ -314,7 +314,8 @@ let h=`<div class="section">
 <button class="save"
 
 onclick="saveBooking('${date}','${session}')">
-
+document.getElementById("f"+id).value = "";
+loadRoster();
 Save
 
 </button>
