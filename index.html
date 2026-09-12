@@ -108,9 +108,34 @@ let t=`<div style="margin-top:10px">
 
 <input id="f${id}" placeholder="Flat Number">
 
-<button class="save" onclick="save('${date}','${session}')">Save</button>
-</div>`;
+async function save(date, session){
 
+  const id = sid(date, session);
+
+  const block = document.getElementById("b"+id).value;
+  const flat  = document.getElementById("f"+id).value.trim();
+
+  if(flat===""){
+    alert("Please enter Flat Number");
+    return;
+  }
+
+  await fetch(SCRIPT_URL,{
+    method:"POST",
+    body:JSON.stringify({
+      mode:"add",
+      date:date,
+      session:session,
+      block:block,
+      flat:flat
+    })
+  });
+
+  // Clear only after successful save
+  document.getElementById("f"+id).value = "";
+
+  await load();
+}
 if(rows.length==0){
 t+="<p style='color:#999'>No booking yet</p>";
 }else{
